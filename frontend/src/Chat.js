@@ -18,7 +18,7 @@ import './MessageBubble.css';
 
 import { useFileUpload } from './useFileUpload';
 
-function Chat({ user, onLogout, onOpenSettings, theme }) {
+function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [socket, setSocket] = useState(null);
@@ -198,7 +198,7 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
     const displayedMessages = messages.slice(-50);
 
     return (
-        <div className={`chat-layout ${theme}`}>
+        <div className={`chat-layout ${theme}`} style={wallpaper ? { backgroundImage: `url(${wallpaper})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}>
             {/* Sidebar */}
             <Sidebar
                 contacts={contacts}

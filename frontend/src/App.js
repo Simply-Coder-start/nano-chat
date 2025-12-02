@@ -8,7 +8,57 @@ import { ToastProvider } from './Toast';
 function App() {
   const [user, setUser] = useState(null);
   const [currentView, setCurrentView] = useState('landing'); // 'landing', 'chat', or 'settings'
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  const [themeMode, setThemeMode] = useState(localStorage.getItem('themeMode') || 'system');
+  const [wallpaper, setWallpaper] = useState(localStorage.getItem('chatWallpaper') || null);
+
+  // Derived theme for display (light/dark)
+  const [displayTheme, setDisplayTheme] = useState('light');
+
+  React.useEffect(() => {
+    const handleSystemThemeChange = (e) => {
+      if (themeMode === 'system') {
+        setDisplayTheme(e.matches ? 'dark' : 'light');
+      }
+    };
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // Initial check
+    const updateTheme = () => {
+      if (themeMode === 'system') {
+        setDisplayTheme(mediaQuery.matches ? 'dark' : 'light');
+      } else {
+        setDisplayTheme(themeMode);
+      }
+    };
+
+    updateTheme();
+
+    if (themeMode === 'system') {
+      mediaQuery.addEventListener('change', handleSystemThemeChange);
+    }
+
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
+  }, [themeMode]);
+
+  React.useEffect(() => {
+    document.body.setAttribute('data-theme', displayTheme);
+  }, [displayTheme]);
+
+  const handleThemeChange = (mode) => {
+    setThemeMode(mode);
+    localStorage.setItem('themeMode', mode);
+  };
+
+  const handleWallpaperChange = (newWallpaper) => {
+    setWallpaper(newWallpaper);
+    if (newWallpaper) {
+      localStorage.setItem('chatWallpaper', newWallpaper);
+    } else {
+      localStorage.removeItem('chatWallpaper');
+    }
+  };
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -25,18 +75,6 @@ function App() {
     setCurrentView('landing');
   };
 
-  React.useEffect(() => {
-    document.body.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => {
-      const newTheme = prev === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme', newTheme);
-      return newTheme;
-    });
-  };
-
   const handleUpdateUser = (updatedUser) => {
     setUser(updatedUser);
   };
@@ -47,7 +85,7 @@ function App() {
 
   return (
     <ToastProvider>
-      <div className={`App ${theme}`}>
+      <div className={`App ${displayTheme}`}>
         {!user || currentView === 'login' ? (
           <Login onLogin={handleLogin} onRegister={handleRegister} />
         ) : (
@@ -57,15 +95,19 @@ function App() {
                 user={user}
                 onLogout={handleLogout}
                 onOpenSettings={() => setCurrentView('settings')}
-                theme={theme}
+                theme={displayTheme}
+                wallpaper={wallpaper}
               />
             )}
             {currentView === 'settings' && (
               <Settings
                 user={user}
-                theme={theme}
+                theme={displayTheme}
+                currentThemeMode={themeMode}
+                wallpaper={wallpaper}
                 onUpdateUser={handleUpdateUser}
-                onToggleTheme={toggleTheme}
+                onUpdateTheme={handleThemeChange}
+                onUpdateWallpaper={handleWallpaperChange}
                 onClose={() => setCurrentView('chat')}
               />
             )}

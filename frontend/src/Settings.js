@@ -17,7 +17,7 @@ import {
 import { useToast } from './Toast';
 import './Settings.css';
 
-function Settings({ user, theme, onUpdateUser, onToggleTheme, onClose }) {
+function Settings({ user, theme, currentThemeMode, wallpaper, onUpdateUser, onUpdateTheme, onUpdateWallpaper, onClose }) {
     // Profile State
     const [username, setUsername] = useState(user?.username || 'User');
     const [bio, setBio] = useState(user?.bio || 'Hey there! I am using Secure Chat.');
@@ -176,6 +176,70 @@ function Settings({ user, theme, onUpdateUser, onToggleTheme, onClose }) {
                             <h3>Chat Settings</h3>
                         </div>
                         <div className="settings-grid">
+                            {/* Theme Selector */}
+                            <div className="setting-item full-width">
+                                <div className="setting-label">
+                                    <IconPalette className="item-icon" />
+                                    <span>Theme</span>
+                                </div>
+                                <div className="theme-selector">
+                                    <button
+                                        className={`theme-btn ${currentThemeMode === 'light' ? 'active' : ''}`}
+                                        onClick={() => onUpdateTheme('light')}
+                                    >
+                                        Light
+                                    </button>
+                                    <button
+                                        className={`theme-btn ${currentThemeMode === 'dark' ? 'active' : ''}`}
+                                        onClick={() => onUpdateTheme('dark')}
+                                    >
+                                        Dark
+                                    </button>
+                                    <button
+                                        className={`theme-btn ${currentThemeMode === 'system' ? 'active' : ''}`}
+                                        onClick={() => onUpdateTheme('system')}
+                                    >
+                                        System
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Wallpaper Selector */}
+                            <div className="setting-item full-width">
+                                <div className="setting-label">
+                                    <IconImage className="item-icon" />
+                                    <span>Chat Wallpaper</span>
+                                </div>
+                                <div className="wallpaper-selector">
+                                    <div className="wallpaper-preview" style={{ backgroundImage: wallpaper ? `url(${wallpaper})` : 'none', backgroundColor: !wallpaper ? '#333' : 'transparent' }}>
+                                        {!wallpaper && <span>Default</span>}
+                                    </div>
+                                    <div className="wallpaper-actions">
+                                        <label className="btn-small">
+                                            Upload
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                style={{ display: 'none' }}
+                                                onChange={(e) => {
+                                                    const file = e.target.files[0];
+                                                    if (file) {
+                                                        const reader = new FileReader();
+                                                        reader.onloadend = () => onUpdateWallpaper(reader.result);
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                        {wallpaper && (
+                                            <button className="btn-small danger" onClick={() => onUpdateWallpaper(null)}>
+                                                Reset
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="setting-item">
                                 <div className="setting-label">
                                     <IconTextSize className="item-icon" />
