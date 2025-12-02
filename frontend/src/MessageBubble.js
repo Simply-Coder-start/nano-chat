@@ -58,7 +58,9 @@ function MessageBubble({ message, isOwnMessage, senderName, avatar }) {
     // Close menu when clicking outside
     React.useEffect(() => {
         const handleClickOutside = (e) => {
-            if (showMenu) setShowMenu(false);
+            if (showMenu && bubbleRef.current && !bubbleRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
         };
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
@@ -68,7 +70,6 @@ function MessageBubble({ message, isOwnMessage, senderName, avatar }) {
         <div
             className={`message-wrapper ${isOwnMessage ? 'sent' : 'received'}`}
             onMouseEnter={openMenu}
-            onMouseLeave={() => setShowMenu(false)}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onContextMenu={handleContextMenu}

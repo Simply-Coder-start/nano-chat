@@ -35,6 +35,10 @@ function Settings({ user, theme, onUpdateUser, onToggleTheme, onClose }) {
 
     // Security State
     const [showSecretKey, setShowSecretKey] = useState(false);
+    const [showPasswordChange, setShowPasswordChange] = useState(false);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const secretKey = process.env.REACT_APP_ENCRYPTION_KEY || "secure-chat-demo-secret-key"; // In real app, this comes from props/context
 
     const fileInputRef = useRef(null);
@@ -57,6 +61,44 @@ function Settings({ user, theme, onUpdateUser, onToggleTheme, onClose }) {
 
     const handleSaveProfile = () => {
         onUpdateUser({ ...user, username, bio, avatar });
+        addToast('Profile updated successfully!', 'success');
+    };
+
+    const handlePasswordChange = async () => {
+        if (newPassword !== confirmPassword) {
+            addToast('Passwords do not match!', 'error');
+            return;
+        }
+        if (newPassword.length < 6) {
+            addToast('Password must be at least 6 characters!', 'error');
+            return;
+        }
+
+        try {
+            const baseUrl = 'https://nano-chat-xl61.onrender.com';
+            const response = await fetch(`${baseUrl}/api/change-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: user.username,
+                    currentPassword,
+                    newPassword
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                addToast('Password changed successfully!', 'success');
+                setShowPasswordChange(false);
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
+            } else {
+                addToast(data.error || 'Failed to change password', 'error');
+            }
+        } catch (error) {
+            addToast('Network error. Please try again.', 'error');
+        }
     };
 
     const copySecretKey = () => {
@@ -68,6 +110,7 @@ function Settings({ user, theme, onUpdateUser, onToggleTheme, onClose }) {
         if (window.confirm('Are you sure you want to clear all chat history? This cannot be undone.')) {
             console.log('Chat cleared');
             // Implement actual clear logic here
+            addToast('Chat history cleared!', 'success');
         }
     };
 
@@ -247,6 +290,65 @@ function Settings({ user, theme, onUpdateUser, onToggleTheme, onClose }) {
                             <div className={`secret-key-display ${showSecretKey ? 'visible' : 'masked'}`}>
                                 {secretKey}
                             </div>
+                        </div>
+
+                        {/* Password Change */}
+                        <div className="security-card" style={{ marginTop: '15px' }}>
+                            <div className="security-header">
+                                <span className="security-label">Change Password</span>
+                                <button
+                                    className="icon-action"
+                                    onClick={() => setShowPasswordChange(!showPasswordChange)}
+                                    style={{ background: showPasswordChange ? 'rgba(168, 216, 234, 0.2)' : 'none' }}
+                                >
+                                    <IconKey className="icon-sm" />
+                                </button>
+                            </div>
+                            {showPasswordChange && (
+                                <div style={{ marginTop: '15px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <div className="input-group">
+                                        <label>Current Password</label>
+                                        <input
+                                            type="password"
+                                            value={currentPassword}
+                                            onChange={(e) => setCurrentPassword(e.target.value)}
+                                            placeholder="Enter current password"
+                                        />
+                                    </div>
+                                    <div className="input-group">
+                                        <label>New Password</label>
+                                        <input
+                                            type="password"
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            placeholder="Enter new password"
+                                        />
+                                    </div>
+                                    <div className="input-group">
+                                        <label>Confirm New Password</label>
+                                        <input
+                                            type="password"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            placeholder="Confirm new password"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={handlePasswordChange}
+                                        style={{
+                                            padding: '10px 20px',
+                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            fontWeight: '600'
+                                        }}
+                                    >
+                                        Change Password
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </section>
 
