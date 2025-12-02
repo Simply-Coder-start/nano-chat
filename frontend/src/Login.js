@@ -64,6 +64,83 @@ function Login({ onLogin, onRegister }) {
     }
   };
 
+  // Google Sign-In handler
+  const handleGoogleSignIn = async (response) => {
+    try {
+      // Decode the JWT token from Google
+      const credential = response.credential;
+      const payload = JSON.parse(atob(credential.split('.')[1]));
+
+      const googleUser = {
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture,
+        googleId: payload.sub
+      };
+
+      // Try to login first with email as username
+      const baseUrl = 'https://nano-chat-xl61.onrender.com';
+      let loginResponse = await fetch(`${baseUrl}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: googleUser.email,
+          password: 'google-oauth-' + googleUser.googleId
+        })
+      });
+
+      let data = await loginResponse.json();
+
+      // If login fails, register the user
+      if (!data.success) {
+        const registerResponse = await fetch(`${baseUrl}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: googleUser.email,
+            password: 'google-oauth-' + googleUser.googleId
+          })
+        });
+        data = await registerResponse.json();
+      }
+
+      if (data.success) {
+        // Add Google profile info to user object
+        const userWithGoogle = {
+          ...data.user,
+          avatar: googleUser.picture,
+          email: googleUser.email
+        };
+        onLogin(userWithGoogle);
+      } else {
+        setError('Failed to sign in with Google');
+      }
+    } catch (error) {
+      console.error('Google Sign-In error:', error);
+      setError('Google Sign-In failed. Please try again.');
+    }
+  };
+
+  // Initialize Google Sign-In
+  useEffect(() => {
+    if (window.google && !isRegistering) {
+      window.google.accounts.id.initialize({
+        client_id: '1076520454182-86c18m2h240tiocaesh45u1gfqic1hps.apps.googleusercontent.com',
+        callback: handleGoogleSignIn
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById('googleSignInButton'),
+        {
+          theme: 'filled_blue',
+          size: 'large',
+          width: 350,
+          text: 'continue_with'
+        }
+      );
+    }
+  }, [isRegistering]);
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -120,6 +197,15 @@ function Login({ onLogin, onRegister }) {
           <button type="submit" className="login-button">
             {isRegistering ? 'Create Account' : 'Sign In'}
           </button>
+
+          {!isRegistering && (
+            <>
+              <div className="divider">
+                <span>OR</span>
+              </div>
+              <div id="googleSignInButton" style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}></div>
+            </>
+          )}
         </form>
 
         <button
