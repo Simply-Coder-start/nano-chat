@@ -30,6 +30,10 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// Google OAuth routes
+const googleAuthRouter = require('./routes/googleAuth');
+app.use('/api/auth', googleAuthRouter);
+
 // Authentication routes
 app.post('/api/register', async (req, res) => {
   try {
