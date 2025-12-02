@@ -29,31 +29,6 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    position: relative;
-    z-index: 1;
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(10px);
-}
-
-/* Header */
-.chat-header {
-    height: 70px;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(17, 24, 39, 0.6);
-    backdrop-filter: blur(12px);
-    position: relative;
-    /* Ensure stacking context */
-    z-index: 50;
-    /* Ensure it stays above messages */
-}
-
-.icon-btn {
-    background: none;
-    border: none;
     color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
     padding: 8px;
