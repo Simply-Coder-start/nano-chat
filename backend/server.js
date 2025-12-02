@@ -30,26 +30,20 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// Google OAuth routes - wrapped in try-catch to prevent startup failures
-try {
-  const googleAuthRouter = require('./routes/googleAuth');
-  app.use('/api/auth', googleAuthRouter);
-  console.log('✅ Google OAuth routes loaded successfully');
-} catch (error) {
-  console.error('❌ Failed to load Google OAuth routes:', error.message);
-  console.error('Google OAuth will not be available');
-}
+// Google OAuth routes - TEMPORARILY DISABLED FOR DEBUGGING
+// try {
+//   const googleAuthRouter = require('./routes/googleAuth');
+//   app.use('/api/auth', googleAuthRouter);
+//   console.log('✅ Google OAuth routes loaded successfully');
+// } catch (error) {
+//   console.error('❌ Failed to load Google OAuth routes:', error.message);
+//   console.error('Google OAuth will not be available');
+// }
 
 // Diagnostic endpoint
 app.get('/api/oauth-status', (req, res) => {
   res.json({
-    googleOAuthConfigured: {
-      clientId: !!process.env.GOOGLE_CLIENT_ID,
-      clientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
-      redirectUri: process.env.GOOGLE_REDIRECT_URI || 'using default',
-      frontendUrl: process.env.FRONTEND_URL || 'using default'
-    },
-    routesRegistered: true,
+    message: 'OAuth temporarily disabled for debugging',
     timestamp: new Date().toISOString()
   });
 });
