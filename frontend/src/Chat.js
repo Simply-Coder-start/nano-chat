@@ -22,10 +22,8 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [socket, setSocket] = useState(null);
-    const [contacts, setContacts] = useState([
-        { id: 1, name: 'Global Chat', avatar: 'https://ui-avatars.com/api/?name=Global&background=667eea&color=fff', status: 'online', lastMessage: 'Welcome to Secure Chat', lastMessageTime: new Date(), isGroup: false }
-    ]);
-    const [selectedContact, setSelectedContact] = useState(contacts[0]);
+    const [contacts, setContacts] = useState([]);
+    const [selectedContact, setSelectedContact] = useState(null);
     const [showAddContact, setShowAddContact] = useState(false);
     const [showCreateGroup, setShowCreateGroup] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
