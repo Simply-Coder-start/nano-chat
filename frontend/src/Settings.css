@@ -75,7 +75,7 @@
 }
 
 .settings-modal {
-  background-color: var(--modal-bg);
+  background-color: #1a1d2e;
   width: 100%;
   max-width: 500px;
   height: 85vh;
@@ -94,7 +94,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--modal-bg);
+  background-color: #1a1d2e;
   z-index: 10;
 }
 
@@ -248,7 +248,7 @@
 .input-group textarea:focus {
   outline: none;
   border-color: var(--accent-secondary);
-  background-color: var(--modal-bg);
+  background-color: #1a1d2e;
 }
 
 /* 2. Chat Settings Grid */
@@ -287,7 +287,7 @@
   padding: 6px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-light);
-  background-color: var(--modal-bg);
+  background-color: #1a1d2e;
   color: var(--text-primary);
   font-size: 13px;
   cursor: pointer;
@@ -336,7 +336,7 @@
   padding: 4px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-light);
-  background-color: var(--modal-bg);
+  background-color: #1a1d2e;
   font-size: 12px;
   color: var(--text-primary);
 }
@@ -446,7 +446,7 @@ input:checked+.slider:before {
   font-family: 'Courier New', monospace;
   font-size: 14px;
   padding: var(--spacing-sm);
-  background-color: var(--modal-bg);
+  background-color: #1a1d2e;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-light);
   color: var(--text-primary);
