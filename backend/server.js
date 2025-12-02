@@ -9,6 +9,9 @@ const fs = require('fs').promises;
 const fsExtra = require('fs-extra');
 const { v4: uuidv4 } = require('uuid');
 
+const connectDB = require('./config/db');
+const Message = require('./models/Message');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -19,35 +22,13 @@ const io = socketIo(server, {
 });
 
 const PORT = process.env.PORT || 3002;
-const MESSAGES_FILE = path.join(__dirname, 'messages.json');
+
+// Connect to MongoDB
+connectDB();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Initialize messages file
-async function initMessagesFile() {
-  try {
-    await fs.access(MESSAGES_FILE);
-  } catch (error) {
-    await fs.writeFile(MESSAGES_FILE, JSON.stringify([]));
-  }
-}
-
-// Read messages from file
-async function readMessages() {
-  try {
-    const data = await fs.readFile(MESSAGES_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-}
-
-// Write messages to file
-async function writeMessages(messages) {
-  await fs.writeFile(MESSAGES_FILE, JSON.stringify(messages, null, 2));
-}
 
 // Authentication routes
 app.post('/api/register', async (req, res) => {
@@ -77,8 +58,15 @@ io.on('connection', (socket) => {
   // Send message history when user connects
   socket.on('getMessageHistory', async () => {
     try {
-      const messages = await readMessages();
-      socket.emit('messageHistory', messages);
+      const messages = await Message.find().sort({ timestamp: 1 });
+      // Map to format expected by frontend if necessary, or ensure frontend handles _id
+      const formattedMessages = messages.map(msg => ({
+        id: msg._id.toString(),
+        username: msg.username,
+        encryptedMessage: msg.encryptedMessage,
+        timestamp: msg.timestamp
+      }));
+      socket.emit('messageHistory', formattedMessages);
     } catch (error) {
       console.error('Error loading message history:', error);
     }
@@ -87,18 +75,18 @@ io.on('connection', (socket) => {
   // Handle new encrypted message
   socket.on('encryptedMessage', async (data) => {
     try {
-      const messages = await readMessages();
-
       // Store the encrypted message (server never sees plaintext)
-      const messageData = {
-        id: Date.now().toString(),
+      const newMessage = await Message.create({
         username: data.username,
         encryptedMessage: data.encryptedMessage,
-        timestamp: new Date().toISOString()
-      };
+      });
 
-      messages.push(messageData);
-      await writeMessages(messages);
+      const messageData = {
+        id: newMessage._id.toString(),
+        username: newMessage.username,
+        encryptedMessage: newMessage.encryptedMessage,
+        timestamp: newMessage.timestamp
+      };
 
       // Broadcast encrypted message to all clients
       io.emit('newEncryptedMessage', messageData);
@@ -110,7 +98,7 @@ io.on('connection', (socket) => {
   // Handle delete chat
   socket.on('deleteChat', async () => {
     try {
-      await writeMessages([]);
+      await Message.deleteMany({});
       io.emit('chatDeleted');
     } catch (error) {
       console.error('Error deleting chat:', error);
@@ -207,7 +195,6 @@ app.get('/api/files/:filename', (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Secure chat server running on port ${PORT}`);
-  initMessagesFile();
   fsExtra.ensureDir(path.join(__dirname, 'uploads'));
   fsExtra.ensureDir(path.join(__dirname, 'temp_uploads'));
 });
