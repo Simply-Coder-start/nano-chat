@@ -30,24 +30,6 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// Google OAuth routes - TEMPORARILY DISABLED FOR DEBUGGING
-// try {
-//   const googleAuthRouter = require('./routes/googleAuth');
-//   app.use('/api/auth', googleAuthRouter);
-//   console.log('✅ Google OAuth routes loaded successfully');
-// } catch (error) {
-//   console.error('❌ Failed to load Google OAuth routes:', error.message);
-//   console.error('Google OAuth will not be available');
-// }
-
-// Diagnostic endpoint
-app.get('/api/oauth-status', (req, res) => {
-  res.json({
-    message: 'OAuth temporarily disabled for debugging',
-    timestamp: new Date().toISOString()
-  });
-});
-
 // Authentication routes
 app.post('/api/register', async (req, res) => {
   try {
