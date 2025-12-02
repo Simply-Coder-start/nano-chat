@@ -10,11 +10,12 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "crypto-js": "^4.1.1",
+    "emoji-picker-react": "^4.16.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "socket.io-client": "^4.7.2",
-    "crypto-js": "^4.1.1"
+    "socket.io-client": "^4.7.2"
   },
   "browserslist": {
     "production": [

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
+import EmojiPicker from 'emoji-picker-react';
 import { encryptMessage, decryptMessage } from './encryption';
 import Sidebar from './Sidebar';
 import MessageBubble from './MessageBubble';
@@ -27,6 +28,7 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
     const [showAddContact, setShowAddContact] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showFileMenu, setShowFileMenu] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     // New State for Options Menu
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
@@ -110,10 +112,15 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
                 encryptedMessage
             });
             setNewMessage('');
+            setShowEmojiPicker(false);
         } catch (error) {
             console.error('Failed to encrypt message:', error);
             alert('Failed to send message. Encryption error.');
         }
+    };
+
+    const onEmojiClick = (emojiObject) => {
+        setNewMessage(prev => prev + emojiObject.emoji);
     };
 
     const handleFileSelect = async (e) => {
@@ -339,9 +346,43 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
                                 }}
                             />
 
-                            <button type="button" className="icon-btn">
+                            <button
+                                type="button"
+                                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                                style={{
+                                    padding: '10px',
+                                    borderRadius: '50%',
+                                    border: 'none',
+                                    background: showEmojiPicker ? 'rgba(168, 216, 234, 0.2)' : 'transparent',
+                                    color: 'var(--text-primary)',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '40px',
+                                    height: '40px',
+                                    transition: 'all 0.2s',
+                                    position: 'relative'
+                                }}
+                            >
                                 <IconEmoji className="icon-md" />
                             </button>
+
+                            {showEmojiPicker && (
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: '60px',
+                                    right: '10px',
+                                    zIndex: 1000
+                                }}>
+                                    <EmojiPicker
+                                        onEmojiClick={onEmojiClick}
+                                        theme={theme === 'dark' ? 'dark' : 'light'}
+                                        width={350}
+                                        height={400}
+                                    />
+                                </div>
+                            )}
 
                             <button
                                 type="submit"
