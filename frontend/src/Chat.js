@@ -197,11 +197,11 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <div style={{ position: 'relative' }}>
                                     <img
-                                        src={selectedContact.avatar || 'https://via.placeholder.com/40'}
+                                        src={selectedContact.avatar || `https://ui-avatars.com/api/?name=${selectedContact.name}&background=random`}
                                         alt={selectedContact.name}
-                                        style={{ width: '42px', height: '42px', borderRadius: '50%', border: '2px solid white', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
+                                        style={{ width: '42px', height: '42px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.1)', objectFit: 'cover' }}
                                     />
-                                    <span className={`dot ${selectedContact.status}`} style={{ position: 'absolute', bottom: '2px', right: '0', border: '2px solid white' }}></span>
+                                    <span className={`dot ${selectedContact.status}`} style={{ position: 'absolute', bottom: '2px', right: '0', border: '2px solid #030712' }}></span>
                                 </div>
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: '17px', fontWeight: '600' }}>{selectedContact.name}</h3>
