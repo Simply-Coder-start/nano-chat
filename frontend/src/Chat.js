@@ -9,7 +9,7 @@ import CreateGroupModal from './CreateGroupModal';
 import {
     IconSettings, IconLogout, IconAttachment, IconMenu,
     IconSend, IconEmoji, IconDocument, IconImage, IconAudio, IconVideo, IconPlus,
-    IconDotsVertical, IconHistory, IconTrash, IconClose
+    IconDotsVertical, IconHistory, IconTrash, IconClose, IconLock, IconUnlock
 } from './Icons';
 import './Settings.css'; // Reusing variables
 import './Chat.css'; // Restored chat styles
@@ -17,6 +17,17 @@ import './Sidebar.css';
 import './MessageBubble.css';
 
 import { useFileUpload } from './useFileUpload';
+
+// Simple hash function for demo purposes (in production use bcrypt on server)
+const hashPassword = (password) => {
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString();
+};
 
 function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
     const [messages, setMessages] = useState([]);
@@ -35,6 +46,18 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
     const [showHistoryModal, setShowHistoryModal] = useState(false); // Kept for potential future use or if we want to view before clearing
     const [showClearConfirm, setShowClearConfirm] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+    // Lock Chat State
+    const [lockedChats, setLockedChats] = useState(() => {
+        const saved = localStorage.getItem('lockedChats');
+        return saved ? JSON.parse(saved) : {};
+    });
+    const [unlockedSessionChats, setUnlockedSessionChats] = useState([]); // List of chat IDs unlocked in this session
+    const [showLockModal, setShowLockModal] = useState(false);
+    const [showUnlockModal, setShowUnlockModal] = useState(false);
+    const [lockPassword, setLockPassword] = useState('');
+    const [unlockPassword, setUnlockPassword] = useState('');
+    const [lockError, setLockError] = useState('');
 
     const messagesEndRef = useRef(null);
     const optionsMenuRef = useRef(null);
@@ -194,6 +217,44 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
         }
     };
 
+    // Lock Chat Logic
+    const handleLockChat = () => {
+        if (!lockPassword) {
+            setLockError('Password cannot be empty');
+            return;
+        }
+        const hashedPassword = hashPassword(lockPassword);
+        const newLockedChats = { ...lockedChats, [selectedContact.id]: hashedPassword };
+        setLockedChats(newLockedChats);
+        localStorage.setItem('lockedChats', JSON.stringify(newLockedChats));
+        setShowLockModal(false);
+        setLockPassword('');
+        setLockError('');
+        setShowOptionsMenu(false);
+    };
+
+    const handleUnlockChat = () => {
+        const hashedPassword = lockedChats[selectedContact.id];
+        if (hashPassword(unlockPassword) === hashedPassword) {
+            setUnlockedSessionChats(prev => [...prev, selectedContact.id]);
+            setShowUnlockModal(false);
+            setUnlockPassword('');
+            setLockError('');
+        } else {
+            setLockError('Incorrect password');
+        }
+    };
+
+    const handleRemoveLock = () => {
+        const newLockedChats = { ...lockedChats };
+        delete newLockedChats[selectedContact.id];
+        setLockedChats(newLockedChats);
+        localStorage.setItem('lockedChats', JSON.stringify(newLockedChats));
+        setShowOptionsMenu(false);
+    };
+
+    const isChatLocked = selectedContact && lockedChats[selectedContact.id] && !unlockedSessionChats.includes(selectedContact.id);
+
     // Limit messages for main view (e.g., last 50)
     const displayedMessages = messages.slice(-50);
 
@@ -206,6 +267,10 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
                 onSelectContact={(contact) => {
                     setSelectedContact(contact);
                     setIsSidebarOpen(false);
+                    // If chat is locked, show unlock modal immediately if not already unlocked
+                    if (lockedChats[contact.id] && !unlockedSessionChats.includes(contact.id)) {
+                        setShowUnlockModal(true);
+                    }
                 }}
                 onAddContact={() => setShowAddContact(true)}
                 onAddFromContacts={() => setShowCreateGroup(true)}
@@ -248,6 +313,9 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
                                     <h3 style={{ margin: 0, fontSize: '17px', fontWeight: '600' }}>{selectedContact.name}</h3>
                                     <span style={{ fontSize: '12px', opacity: 0.6 }}>{selectedContact.status === 'online' ? 'Active now' : selectedContact.status}</span>
                                 </div>
+                                {lockedChats[selectedContact.id] && (
+                                    <IconLock className="icon-xs" style={{ marginLeft: '10px', opacity: 0.5 }} />
+                                )}
                             </div>
                         ) : (
                             <div style={{ padding: '10px', fontStyle: 'italic', opacity: 0.6 }}>Select a chat</div>
@@ -268,6 +336,15 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
 
                                 {showOptionsMenu && (
                                     <div className="options-menu">
+                                        {lockedChats[selectedContact.id] ? (
+                                            <button onClick={handleRemoveLock}>
+                                                <IconUnlock className="icon-xs" /> Remove Lock
+                                            </button>
+                                        ) : (
+                                            <button onClick={() => { setShowLockModal(true); setShowOptionsMenu(false); }}>
+                                                <IconLock className="icon-xs" /> Lock Chat
+                                            </button>
+                                        )}
                                         <button onClick={() => { setShowClearConfirm(true); setShowOptionsMenu(false); }}>
                                             <IconHistory className="icon-xs" /> Clear Old Messages
                                         </button>
@@ -289,7 +366,7 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
                 </div>
 
                 {/* Messages */}
-                <div className="messages-container">
+                <div className="messages-container" style={isChatLocked ? { filter: 'blur(10px)', pointerEvents: 'none' } : {}}>
                     {selectedContact ? (
                         <>
                             {displayedMessages.map((msg, index) => (
@@ -311,7 +388,7 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
                 </div>
 
                 {/* Input Area */}
-                {selectedContact && (
+                {selectedContact && !isChatLocked && (
                     <div className="chat-input-area">
                         {/* File Sharing Menu */}
                         {showFileMenu && (
@@ -429,6 +506,71 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
                                 <IconSend className="icon-sm" style={{ marginLeft: '2px' }} />
                             </button>
                         </form>
+                    </div>
+                )}
+
+                {/* Lock Chat Modal */}
+                {showLockModal && (
+                    <div className="modal-overlay" onClick={() => setShowLockModal(false)}>
+                        <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '350px' }}>
+                            <h3 className="modal-title">Lock Chat</h3>
+                            <p style={{ marginBottom: '15px', opacity: 0.8 }}>Set a password to lock this chat.</p>
+                            <input
+                                type="password"
+                                value={lockPassword}
+                                onChange={(e) => setLockPassword(e.target.value)}
+                                placeholder="Enter password"
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    borderRadius: '8px',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    color: '#fff',
+                                    marginBottom: '10px'
+                                }}
+                                autoFocus
+                            />
+                            {lockError && <div style={{ color: '#ff6b6b', fontSize: '14px', marginBottom: '10px' }}>{lockError}</div>}
+                            <div className="modal-actions">
+                                <button className="btn btn-secondary" onClick={() => setShowLockModal(false)}>Cancel</button>
+                                <button className="btn btn-primary" onClick={handleLockChat}>Lock</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Unlock Chat Modal */}
+                {showUnlockModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '350px' }}>
+                            <h3 className="modal-title">Unlock Chat</h3>
+                            <p style={{ marginBottom: '15px', opacity: 0.8 }}>Enter password to view this chat.</p>
+                            <input
+                                type="password"
+                                value={unlockPassword}
+                                onChange={(e) => setUnlockPassword(e.target.value)}
+                                placeholder="Enter password"
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    borderRadius: '8px',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    color: '#fff',
+                                    marginBottom: '10px'
+                                }}
+                                autoFocus
+                            />
+                            {lockError && <div style={{ color: '#ff6b6b', fontSize: '14px', marginBottom: '10px' }}>{lockError}</div>}
+                            <div className="modal-actions">
+                                <button className="btn btn-secondary" onClick={() => {
+                                    setShowUnlockModal(false);
+                                    setSelectedContact(null); // Go back if cancelled
+                                }}>Cancel</button>
+                                <button className="btn btn-primary" onClick={handleUnlockChat}>Unlock</button>
+                            </div>
+                        </div>
                     </div>
                 )}
 
