@@ -14,7 +14,7 @@ export function useFileUpload() {
 
         try {
             // 1. Init
-            const initRes = await fetch('http://localhost:3002/api/upload/init', {
+            const initRes = await fetch('https://nano-chat-xl61.onrender.com/api/upload/init', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ filename: file.name, size: file.size, mimeType: file.type })
@@ -30,7 +30,7 @@ export function useFileUpload() {
                 const end = Math.min(file.size, start + CHUNK_SIZE);
                 const chunk = file.slice(start, end);
 
-                const chunkRes = await fetch(`http://localhost:3002/api/upload/chunk?uploadId=${uploadId}&chunkIndex=${i}`, {
+                const chunkRes = await fetch(`https://nano-chat-xl61.onrender.com/api/upload/chunk?uploadId=${uploadId}&chunkIndex=${i}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/octet-stream' },
                     body: chunk
@@ -42,7 +42,7 @@ export function useFileUpload() {
             }
 
             // 3. Complete
-            const completeRes = await fetch('http://localhost:3002/api/upload/complete', {
+            const completeRes = await fetch('https://nano-chat-xl61.onrender.com/api/upload/complete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ uploadId, filename: file.name })
