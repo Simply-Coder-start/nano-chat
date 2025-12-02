@@ -1,0 +1,50 @@
+import CryptoJS from 'crypto-js';
+
+// For demo purposes, we're using a hardcoded shared secret key
+// In a real application, this would be securely exchanged between users
+const SHARED_SECRET_KEY = 'secure-chat-demo-key-12345';
+
+/**
+ * Encrypts a message using AES encryption
+ * @param {string} message - The plaintext message to encrypt
+ * @returns {string} The encrypted message in Base64 format
+ */
+export function encryptMessage(message) {
+  try {
+    // Encrypt the message using AES with the shared secret key
+    const encrypted = CryptoJS.AES.encrypt(message, SHARED_SECRET_KEY);
+    
+    // Return the encrypted data as a Base64 string
+    return encrypted.toString();
+  } catch (error) {
+    console.error('Encryption error:', error);
+    throw new Error('Failed to encrypt message');
+  }
+}
+
+/**
+ * Decrypts an encrypted message using AES decryption
+ * @param {string} encryptedMessage - The encrypted message in Base64 format
+ * @returns {string} The decrypted plaintext message
+ */
+export function decryptMessage(encryptedMessage) {
+  try {
+    // Decrypt the message using AES with the shared secret key
+    const decrypted = CryptoJS.AES.decrypt(encryptedMessage, SHARED_SECRET_KEY);
+    
+    // Convert the decrypted data to a UTF-8 string
+    const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+    
+    if (!plaintext) {
+      throw new Error('Failed to decrypt message - possibly wrong key');
+    }
+    
+    return plaintext;
+  } catch (error) {
+    console.error('Decryption error:', error);
+    throw new Error('Failed to decrypt message');
+  }
+}
+
+// Export the key for potential key management UI (not used in basic demo)
+export { SHARED_SECRET_KEY };

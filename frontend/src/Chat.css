@@ -1,0 +1,278 @@
+/* Chat.css */
+.chat-layout {
+    display: flex;
+    height: 100vh;
+    background-color: #030712;
+    /* Deep dark bg */
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Background Effect (similar to Landing Page) */
+.chat-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 15% 25%, rgba(34, 211, 238, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(167, 139, 250, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.main-chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+}
+
+/* Header */
+.chat-header {
+    height: 70px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(12px);
+    position: relative;
+    /* Ensure stacking context */
+    z-index: 50;
+    /* Ensure it stays above messages */
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.icon-sm {
+    width: 20px;
+    height: 20px;
+}
+
+.icon-md {
+    width: 24px;
+    height: 24px;
+}
+
+.icon-xs {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+/* Messages Area */
+.messages-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Input Area */
+.chat-input-area {
+    padding: 20px;
+    background: rgba(17, 24, 39, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+}
+
+.chat-input-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 15px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: border-color 0.3s;
+}
+
+.chat-input-form:focus-within {
+    border-color: rgba(167, 139, 250, 0.5);
+    /* Neon Lavender */
+}
+
+/* File Menu */
+.file-menu {
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    background: rgba(17, 24, 39, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Options Menu */
+.options-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 5px;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.options-menu button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.options-menu button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.options-menu button.danger {
+    color: #ff6b6b;
+}
+
+.options-menu button.danger:hover {
+    background: rgba(255, 107, 107, 0.1);
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    background: rgba(17, 24, 39, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.modal-title {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}

@@ -1,0 +1,159 @@
+.message-wrapper {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-end;
+    gap: 12px;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-wrapper.sent {
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid white;
+    transition: transform 0.2s;
+}
+
+.message-avatar:hover {
+    transform: scale(1.1);
+}
+
+.message-content-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+    position: relative;
+}
+
+.message-wrapper.sent .message-content-group {
+    align-items: flex-end;
+}
+
+.message-bubble {
+    padding: 14px 20px;
+    border-radius: var(--radius-lg);
+    position: relative;
+    font-size: 15px;
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.1s;
+}
+
+.message-wrapper.received .message-bubble {
+    background-color: var(--card-bg-light);
+    border-bottom-left-radius: 4px;
+    color: var(--text-color-light);
+}
+
+.dark .message-wrapper.received .message-bubble {
+    background-color: var(--card-bg-dark);
+    color: var(--text-color-dark);
+}
+
+.message-wrapper.sent .message-bubble {
+    background: var(--accent-color);
+    /* Pastel Blue */
+    color: #fff;
+    /* Darker text for contrast on pastel, or white if dark enough */
+    border-bottom-right-radius: 4px;
+    /* Ensure text is readable on pastel blue */
+    color: #2c3e50;
+}
+
+/* Adjust text color for sent messages if accent is dark, but for pastel blue, dark text is better or white with shadow */
+.message-wrapper.sent .message-bubble {
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message-timestamp {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 6px;
+    margin-left: 4px;
+    font-weight: 500;
+}
+
+.message-wrapper.sent .message-timestamp {
+    margin-right: 4px;
+    text-align: right;
+}
+
+/* Message Interactions */
+.message-actions {
+    position: absolute;
+    top: -35px;
+    background: var(--card-bg-light);
+    padding: 6px 12px;
+    border-radius: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.dark .message-actions {
+    background: var(--card-bg-dark);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.message-wrapper:hover .message-actions {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.message-wrapper.sent .message-actions {
+    right: 0;
+}
+
+.message-wrapper.received .message-actions {
+    left: 0;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 6px;
+    border-radius: 50%;
+    transition: all 0.2s;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: scale(1.2);
+}
+
+.dark .action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}

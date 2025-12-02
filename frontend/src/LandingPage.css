@@ -1,0 +1,292 @@
+/* LandingPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+:root {
+    --color-bg-main: #030712;
+    /* Deepest dark */
+    --color-bg-secondary: #111827;
+
+    /* The NanoBana Neon Palette */
+    --neon-lavender: #a78bfa;
+    --neon-cyan: #22d3ee;
+    --neon-peach: #f472b6;
+    --neon-mint: #34d399;
+
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+}
+
+.landing-body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-bg-main);
+    color: #ffffff;
+    overflow-x: hidden;
+    /* The base layer of the NanoBana effect textured background */
+    background-image:
+        radial-gradient(circle at 15% 25%, rgba(34, 211, 238, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(167, 139, 250, 0.08) 0%, transparent 40%);
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Utility Classes */
+.landing-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section-padding {
+    padding: 8rem 0;
+}
+
+.gradient-text {
+    background: linear-gradient(to right, var(--neon-cyan), var(--neon-lavender), var(--neon-peach));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+/* --- Animations Utility Classes --- */
+/* Initial state for elements that will animate on scroll */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* State when element enters viewport */
+.scroll-animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger delays for grid items */
+.delay-1 {
+    transition-delay: 0.1s;
+}
+
+.delay-2 {
+    transition-delay: 0.2s;
+}
+
+.delay-3 {
+    transition-delay: 0.3s;
+}
+
+
+/* --- The "NanoBana" Glassmorphism Aesthetic --- */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 24px;
+}
+
+/* --- Floating Nano Particles Animation (Background) --- */
+.particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    /* Behind content but above body bg */
+    pointer-events: none;
+}
+
+.nano-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.4;
+    animation: float 20s infinite ease-in-out alternate;
+}
+
+.orb-1 {
+    top: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: var(--neon-lavender);
+    animation-duration: 25s;
+}
+
+.orb-2 {
+    bottom: -10%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: var(--neon-cyan);
+    animation-duration: 18s;
+}
+
+.orb-3 {
+    top: 40%;
+    left: 60%;
+    width: 300px;
+    height: 300px;
+    background: var(--neon-peach);
+    animation-duration: 30s;
+    opacity: 0.2;
+}
+
+.orb-4 {
+    bottom: 30%;
+    left: 20%;
+    width: 200px;
+    height: 200px;
+    background: var(--neon-mint);
+    animation-duration: 22s;
+    opacity: 0.2;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    50% {
+        transform: translate(50px, 50px) rotate(10deg);
+    }
+
+    100% {
+        transform: translate(-30px, 20px) rotate(-5deg);
+    }
+}
+
+/* --- Section Specific Styles --- */
+
+/* Hero */
+.hero-section {
+    min-height: 95vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-headline {
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtext {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-inline: auto;
+}
+
+/* Buttons with Glow */
+.btn-primary {
+    padding: 1rem 2.5rem;
+    background: linear-gradient(to right, var(--neon-cyan), var(--neon-lavender));
+    color: var(--color-bg-main);
+    font-weight: 600;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 40px rgba(34, 211, 238, 0.6);
+}
+
+/* Features Grid */
+.features-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    padding: 3rem 2rem;
+    /* Combining scroll animation with hover transition */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out, background 0.4s ease, box-shadow 0.4s ease !important;
+}
+
+.feature-card.visible:hover {
+    transform: translateY(-10px) scale(1.02);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 211, 238, 0.1);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--neon-cyan);
+    width: 48px;
+    height: 48px;
+}
+
+/* CTA Section */
+.cta-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 50%;
+    background: var(--neon-mint);
+    filter: blur(100px);
+    opacity: 0.15;
+    z-index: -1;
+}
+
+/* Footer */
+.footer {
+    padding: 3rem 0;
+    text-align: center;
+    border-top: 1px solid var(--glass-border);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-headline {
+        font-size: 3rem;
+    }
+
+    .section-padding {
+        padding: 5rem 0;
+    }
+
+    .cta-container {
+        padding: 3rem 2rem;
+    }
+}

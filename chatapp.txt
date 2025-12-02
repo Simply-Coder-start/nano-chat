@@ -1,0 +1,17 @@
+secure-chat/
+├── backend/
+│   ├── server.js
+│   ├── auth.js
+│   ├── users.json
+│   ├── messages.json
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── App.js
+│   │   ├── Login.js
+│   │   ├── Chat.js
+│   │   └── encryption.js
+│   ├── public/
+│   │   └── index.html
+│   └── package.json
+└── README.md
