@@ -34,6 +34,20 @@ app.use(express.json());
 const googleAuthRouter = require('./routes/googleAuth');
 app.use('/api/auth', googleAuthRouter);
 
+// Diagnostic endpoint
+app.get('/api/oauth-status', (req, res) => {
+  res.json({
+    googleOAuthConfigured: {
+      clientId: !!process.env.GOOGLE_CLIENT_ID,
+      clientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+      redirectUri: process.env.GOOGLE_REDIRECT_URI || 'using default',
+      frontendUrl: process.env.FRONTEND_URL || 'using default'
+    },
+    routesRegistered: true,
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Authentication routes
 app.post('/api/register', async (req, res) => {
   try {
