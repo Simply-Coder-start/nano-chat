@@ -1,8 +1,8 @@
 import CryptoJS from 'crypto-js';
 
 // In a real application, this key should be securely exchanged or derived.
-// For this demo, we use a shared hardcoded key as noted in the Login UI.
-const SECRET_KEY = 'secure-chat-demo-secret-key';
+// For this demo, we use a shared key from environment variables.
+const SECRET_KEY = process.env.REACT_APP_ENCRYPTION_KEY || 'secure-chat-demo-secret-key';
 
 export const encryptMessage = (message) => {
   try {

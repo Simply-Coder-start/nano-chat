@@ -35,7 +35,7 @@ function Settings({ user, theme, onUpdateUser, onToggleTheme, onClose }) {
 
     // Security State
     const [showSecretKey, setShowSecretKey] = useState(false);
-    const secretKey = "secure-chat-demo-secret-key"; // In real app, this comes from props/context
+    const secretKey = process.env.REACT_APP_ENCRYPTION_KEY || "secure-chat-demo-secret-key"; // In real app, this comes from props/context
 
     const fileInputRef = useRef(null);
     const { addToast } = useToast();
