@@ -5,6 +5,7 @@ import { encryptMessage, decryptMessage } from './encryption';
 import Sidebar from './Sidebar';
 import MessageBubble from './MessageBubble';
 import AddContactModal from './AddContactModal';
+import CreateGroupModal from './CreateGroupModal';
 import {
     IconSettings, IconLogout, IconAttachment, IconMenu,
     IconSend, IconEmoji, IconDocument, IconImage, IconAudio, IconVideo, IconPlus,
@@ -22,10 +23,11 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
     const [newMessage, setNewMessage] = useState('');
     const [socket, setSocket] = useState(null);
     const [contacts, setContacts] = useState([
-        { id: 1, name: 'Global Chat', avatar: null, status: 'online', lastMessage: 'Welcome to Secure Chat', lastMessageTime: new Date() }
+        { id: 1, name: 'Global Chat', avatar: 'https://ui-avatars.com/api/?name=Global&background=667eea&color=fff', status: 'online', lastMessage: 'Welcome to Secure Chat', lastMessageTime: new Date(), isGroup: false }
     ]);
     const [selectedContact, setSelectedContact] = useState(contacts[0]);
     const [showAddContact, setShowAddContact] = useState(false);
+    const [showCreateGroup, setShowCreateGroup] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showFileMenu, setShowFileMenu] = useState(false);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -150,8 +152,30 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
         fileInputRef.current?.click();
     };
 
-    const handleAddContact = (newContact) => {
-        setContacts(prev => [...prev, newContact]);
+    const handleAddContact = (newContactOrType) => {
+        // If it's 'group', show create group modal
+        if (newContactOrType === 'group') {
+            setShowCreateGroup(true);
+            return;
+        }
+        // Otherwise, add the contact
+        setContacts(prev => [...prev, newContactOrType]);
+    };
+
+    const handleCreateGroup = (groupData) => {
+        const newGroup = {
+            id: Date.now(),
+            name: groupData.name,
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(groupData.name)}&background=764ba2&color=fff`,
+            status: `${groupData.members.length} members`,
+            lastMessage: 'Group created',
+            lastMessageTime: new Date(),
+            isGroup: true,
+            members: groupData.members
+        };
+        setContacts(prev => [...prev, newGroup]);
+        setSelectedContact(newGroup);
+        setShowCreateGroup(false);
     };
 
     const handleClearChat = () => {
@@ -413,6 +437,14 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
                     <AddContactModal
                         onClose={() => setShowAddContact(false)}
                         onAdd={handleAddContact}
+                    />
+                )}
+
+                {showCreateGroup && (
+                    <CreateGroupModal
+                        contacts={contacts}
+                        onClose={() => setShowCreateGroup(false)}
+                        onCreate={handleCreateGroup}
                     />
                 )}
 
