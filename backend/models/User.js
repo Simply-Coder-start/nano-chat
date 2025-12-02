@@ -4,16 +4,29 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
     },
     password: {
         type: String,
-        required: true,
+        required: true
+    },
+    email: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    avatar: {
+        type: String
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-    },
+        default: Date.now
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);
