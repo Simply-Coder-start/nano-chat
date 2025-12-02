@@ -12,6 +12,8 @@
   justify-content: center;
   z-index: 2000;
   animation: fadeIn 0.2s ease-out;
+  color: #ffffff;
+  /* Ensure text is white by default (dark mode) */
 }
 
 .settings-modal {
@@ -25,6 +27,8 @@
   flex-direction: column;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   overflow: hidden;
+  color: #ffffff;
+  /* Explicitly set text color for dark mode */
 }
 
 /* Light Theme Override */
