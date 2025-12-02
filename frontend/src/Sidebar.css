@@ -185,11 +185,6 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.add-contact-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-}
-
 .sidebar {
     width: 320px;
     background-color: var(--card-bg-light);
@@ -386,8 +381,22 @@
     transform: translateY(0);
 }
 
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100dvh;
+        width: 85%;
+        max-width: 320px;
+        transform: translateX(-100%);
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
 
-.sidebar.open {
-    transform: translateX(0);
-}
+    .sidebar.open {
+        transform: translateX(0);
+    }
 }
