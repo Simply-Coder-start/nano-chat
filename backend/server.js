@@ -30,9 +30,15 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// Google OAuth routes
-const googleAuthRouter = require('./routes/googleAuth');
-app.use('/api/auth', googleAuthRouter);
+// Google OAuth routes - wrapped in try-catch to prevent startup failures
+try {
+  const googleAuthRouter = require('./routes/googleAuth');
+  app.use('/api/auth', googleAuthRouter);
+  console.log('✅ Google OAuth routes loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load Google OAuth routes:', error.message);
+  console.error('Google OAuth will not be available');
+}
 
 // Diagnostic endpoint
 app.get('/api/oauth-status', (req, res) => {
