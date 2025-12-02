@@ -17,7 +17,8 @@ function Login({ onLogin, onRegister }) {
     }
 
     try {
-      const endpoint = isRegistering ? '/api/register' : '/api/login';
+      const baseUrl = 'https://nano-chat-xl61.onrender.com';
+      const endpoint = isRegistering ? `${baseUrl}/api/register` : `${baseUrl}/api/login`;
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
