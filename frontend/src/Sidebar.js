@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ContactItem from './ContactItem';
-import { IconSearch, IconPlus } from './Icons';
+import { IconSearch, IconPlus, IconUsers } from './Icons';
 import './Sidebar.css';
 
 function Sidebar({ contacts, selectedContactId, onSelectContact, onAddContact, isOpen }) {
@@ -48,6 +48,10 @@ function Sidebar({ contacts, selectedContactId, onSelectContact, onAddContact, i
 
             <button className="add-contact-btn" onClick={onAddContact}>
                 <IconPlus className="icon-sm" /> <span>Add Contact</span>
+            </button>
+
+            <button className="add-contact-btn create-group-btn" onClick={() => onAddContact('group')}>
+                <IconUsers className="icon-sm" /> <span>Create Group</span>
             </button>
         </div>
     );
