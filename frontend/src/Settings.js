@@ -12,7 +12,8 @@ import {
     IconFont,
     IconMessage,
     IconBroom,
-    IconKey
+    IconKey,
+    IconImage
 } from './Icons';
 import { useToast } from './Toast';
 import './Settings.css';
