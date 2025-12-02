@@ -187,6 +187,23 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
                 {/* Header */}
                 <div className="chat-header">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        {/* Mobile-only hamburger menu */}
+                        <button
+                            className="mobile-menu-btn"
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            style={{
+                                display: 'none',
+                                background: 'rgba(168, 216, 234, 0.15)',
+                                border: '1px solid rgba(168, 216, 234, 0.3)',
+                                color: '#a8d8ea',
+                                padding: '8px 12px',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontSize: '20px'
+                            }}
+                        >
+                            ☰
+                        </button>
                         {selectedContact ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <div style={{ position: 'relative' }}>
