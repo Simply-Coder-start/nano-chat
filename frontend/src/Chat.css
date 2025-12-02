@@ -275,7 +275,6 @@
     .chat-layout {
         position: relative;
         height: 100dvh;
-        /* Use dynamic viewport height for mobile browsers */
     }
 
     .main-chat-area {
@@ -289,6 +288,22 @@
 
     .chat-header {
         padding: 10px 15px;
+        flex-wrap: nowrap;
+    }
+
+    /* Show mobile menu button only on mobile */
+    .mobile-menu-btn {
+        display: block !important;
+    }
+
+    /* Icon buttons smaller on mobile */
+    .icon-btn {
+        padding: 8px;
+    }
+
+    .icon-sm {
+        width: 18px;
+        height: 18px;
     }
 
     .messages-container {
@@ -302,6 +317,11 @@
 
     .chat-input-form {
         padding: 5px 10px;
+        gap: 5px;
+    }
+
+    .chat-input-form input {
+        font-size: 14px !important;
     }
 
     .file-menu {
@@ -312,5 +332,11 @@
     .modal-content {
         width: 95%;
         padding: 20px;
+    }
+
+    /* Options menu positioning for mobile */
+    .options-menu {
+        right: 0;
+        left: auto;
     }
 }
