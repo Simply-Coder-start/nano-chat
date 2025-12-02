@@ -125,7 +125,7 @@ function Login({ onLogin, onRegister }) {
   useEffect(() => {
     if (window.google && !isRegistering) {
       window.google.accounts.id.initialize({
-        client_id: '1076520454182-86c18m2h240tiocaesh45u1gfqic1hps.apps.googleusercontent.com',
+        client_id: '1076520454182-p8vhtln2pmidi74pb2f0icvcteimv7hr.apps.googleusercontent.com',
         callback: handleGoogleSignIn
       });
 
