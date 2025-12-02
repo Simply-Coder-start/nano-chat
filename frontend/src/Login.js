@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 
 function Login({ onLogin, onRegister }) {
@@ -6,6 +6,18 @@ function Login({ onLogin, onRegister }) {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Load saved credentials on mount
+  useEffect(() => {
+    const savedUsername = localStorage.getItem('rememberedUsername');
+    const savedPassword = localStorage.getItem('rememberedPassword');
+    if (savedUsername && savedPassword) {
+      setUsername(savedUsername);
+      setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +42,15 @@ function Login({ onLogin, onRegister }) {
       const data = await response.json();
 
       if (data.success) {
+        // Save credentials if remember me is checked
+        if (rememberMe) {
+          localStorage.setItem('rememberedUsername', username);
+          localStorage.setItem('rememberedPassword', password);
+        } else {
+          localStorage.removeItem('rememberedUsername');
+          localStorage.removeItem('rememberedPassword');
+        }
+
         if (isRegistering) {
           onRegister(data.user);
         } else {
@@ -79,6 +100,20 @@ function Login({ onLogin, onRegister }) {
               name="password_field_no_autofill"
             />
           </div>
+
+          {!isRegistering && (
+            <div className="remember-me-container">
+              <label className="remember-me-label">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="remember-me-checkbox"
+                />
+                <span>Remember me</span>
+              </label>
+            </div>
+          )}
 
           {error && <div className="error-message">{error}</div>}
 
