@@ -151,232 +151,49 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
+}
 
-    ```css .sidebar {
-        width: 320px;
-        background-color: #1a1d2e;
-        color: #ffffff;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        transition: background-color 0.3s, transform 0.3s;
-        z-index: 10;
-    }
+/* Add Contact Button */
+.add-contact-btn {
+    margin: 20px;
+    padding: 12px;
+    background: #a8d8ea;
+    color: #1a1d2e;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(168, 216, 234, 0.3);
+}
 
-    .dark .sidebar {
-        background-color: #1a1d2e;
-        color: #ffffff;
-        border-right-color: rgba(255, 255, 255, 0.1);
-    }
+height: 100dvh;
+width: 85%;
+max-width: 320px;
+transform: translateX(-100%);
+box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+z-index: 1000;
+transition: transform 0.3s ease-in-out;
+}
 
-    /* Search Area */
-    .sidebar-header {
-        padding: 20px;
-    }
+.sidebar.open {
+    transform: translateX(0);
+}
 
-    .search-container {
-        position: relative;
-    }
-
-    .search-input {
-        width: 100%;
-        padding: 10px 15px 10px 35px;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background-color: rgba(255, 255, 255, 0.05);
-        color: #ffffff;
-        font-size: 14px;
-        transition: all 0.2s;
-        box-sizing: border-box;
-    }
-
-    .search-input:focus {
-        outline: none;
-        background-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        border-color: #a8d8ea;
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0.6;
-        font-size: 14px;
-        color: #ffffff;
-    }
-
-    /* Contact List */
-    .contact-list {
-        flex: 1;
-        overflow-y: auto;
-        padding: 0 10px;
-    }
-
-    /* Contact Item */
-    .contact-item {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.2s;
-        margin-bottom: 5px;
-        position: relative;
-        color: #ffffff;
-    }
-
-    .contact-item:hover {
-        background-color: rgba(255, 255, 255, 0.08);
-    }
-
-    .contact-item.active {
-        background-color: rgba(168, 216, 234, 0.15);
-    }
-
-    .contact-item.active::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 20px;
-        width: 3px;
-        background-color: #a8d8ea;
-        border-radius: 0 3px 3px 0;
-    }
-
-    .contact-avatar-wrapper {
-        position: relative;
-        margin-right: 15px;
-    }
-
-    .contact-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        object-fit: cover;
-        background-color: #ddd;
-    }
-
-    .contact-status-dot {
-        position: absolute;
-        bottom: 2px;
-        right: 2px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        border: 2px solid #1a1d2e;
-    }
-
-    .contact-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .contact-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 4px;
-    }
-
-    .contact-name {
-        font-weight: 600;
-        font-size: 15px;
-        color: #ffffff;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .contact-time {
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.6);
-        white-space: nowrap;
-    }
-
-    .contact-preview {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.5);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-    }
-
-    /* Add Contact Button */
-    .add-contact-btn {
-        margin: 20px;
-        padding: 12px;
-        background: #a8d8ea;
-        color: #1a1d2e;
-        border: none;
-        border-radius: 12px;
-        font-weight: 700;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 4px 12px rgba(168, 216, 234, 0.3);
-    }
-
-    .add-contact-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(168, 216, 234, 0.5);
-        background: #b8e8fa;
-    }
-
-    .add-contact-btn:active {
-        transform: translateY(0);
-    }
-
-    .create-group-btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        margin-top: 8px;
-    }
-
-    .create-group-btn:hover {
-        background: linear-gradient(135deg, #7c8ff0 0%, #8a5bb0 100%);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-        .sidebar {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            height: 100dvh;
-            width: 85%;
-            max-width: 320px;
-            transform: translateX(-100%);
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .sidebar.open {
-            transform: translateX(0);
-        }
-
-        /* Overlay when sidebar is open */
-        .sidebar.open::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 100%;
-            width: 100vw;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(2px);
-            z-index: -1;
-        }
-    }
-
-    ```
+/* Overlay when sidebar is open */
+.sidebar.open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 100vw;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: -1;
+}
+}
