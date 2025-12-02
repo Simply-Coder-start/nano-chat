@@ -1,8 +1,8 @@
 .sidebar {
     width: 320px;
-    background-color: var(--card-bg, #ffffff);
-    color: var(--text-primary, #1a1a1a);
-    border-right: 1px solid var(--border-light, rgba(0, 0, 0, 0.05));
+    background-color: #1a1d2e;
+    color: #ffffff;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -10,11 +10,10 @@
     z-index: 10;
 }
 
-/* Dark mode overrides are handled by CSS variables, but we keep specific overrides if needed */
 .dark .sidebar {
-    background-color: var(--card-bg, #3a3a3a);
-    color: var(--text-primary, #ffffff);
-    border-right-color: var(--border-light, rgba(255, 255, 255, 0.05));
+    background-color: #1a1d2e;
+    color: #ffffff;
+    border-right-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Search Area */
@@ -30,9 +29,9 @@
     width: 100%;
     padding: 10px 15px 10px 35px;
     border-radius: 20px;
-    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.1));
-    background-color: var(--bg-hover, rgba(0, 0, 0, 0.03));
-    color: var(--text-primary, inherit);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
     font-size: 14px;
     transition: all 0.2s;
     box-sizing: border-box;
@@ -40,9 +39,9 @@
 
 .search-input:focus {
     outline: none;
-    background-color: var(--modal-bg, white);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border-color: var(--accent-secondary, #636e72);
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-color: #a8d8ea;
 }
 
 .search-icon {
@@ -50,9 +49,9 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    opacity: 0.5;
+    opacity: 0.6;
     font-size: 14px;
-    color: var(--text-secondary, #666);
+    color: #ffffff;
 }
 
 /* Contact List */
@@ -72,15 +71,15 @@
     transition: all 0.2s;
     margin-bottom: 5px;
     position: relative;
-    color: var(--text-primary, inherit);
+    color: #ffffff;
 }
 
 .contact-item:hover {
-    background-color: var(--bg-hover, rgba(0, 0, 0, 0.03));
+    background-color: rgba(255, 255, 255, 0.08);
 }
 
 .contact-item.active {
-    background-color: rgba(102, 126, 234, 0.1);
+    background-color: rgba(168, 216, 234, 0.15);
 }
 
 .contact-item.active::before {
@@ -91,7 +90,7 @@
     transform: translateY(-50%);
     height: 20px;
     width: 3px;
-    background-color: var(--accent-color, #a8d8ea);
+    background-color: #a8d8ea;
     border-radius: 0 3px 3px 0;
 }
 
@@ -115,7 +114,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid var(--card-bg, white);
+    border: 2px solid #1a1d2e;
 }
 
 .contact-info {
@@ -133,7 +132,7 @@
 .contact-name {
     font-weight: 600;
     font-size: 15px;
-    color: var(--text-primary, inherit);
+    color: #ffffff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -141,13 +140,13 @@
 
 .contact-time {
     font-size: 11px;
-    color: var(--text-secondary, #666666);
+    color: rgba(255, 255, 255, 0.6);
     white-space: nowrap;
 }
 
 .contact-preview {
     font-size: 13px;
-    color: var(--text-secondary, #666666);
+    color: rgba(255, 255, 255, 0.5);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -158,8 +157,8 @@
 .add-contact-btn {
     margin: 20px;
     padding: 12px;
-    background: var(--accent-color, #a8d8ea);
-    color: #333;
+    background: #a8d8ea;
+    color: #1a1d2e;
     border: none;
     border-radius: 12px;
     font-weight: 700;
@@ -169,12 +168,13 @@
     justify-content: center;
     gap: 8px;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(168, 216, 234, 0.3);
 }
 
 .add-contact-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 16px rgba(168, 216, 234, 0.5);
+    background: #b8e8fa;
 }
 
 .add-contact-btn:active {
