@@ -187,12 +187,6 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
                 {/* Header */}
                 <div className="chat-header">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                        <button
-                            className="hamburger-btn"
-                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        >
-                            <IconMenu className="icon-md" />
-                        </button>
                         {selectedContact ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <div style={{ position: 'relative' }}>
