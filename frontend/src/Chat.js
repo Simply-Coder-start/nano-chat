@@ -41,7 +41,9 @@ function Chat({ user, onLogout, onOpenSettings, theme }) {
     const { uploadFile, uploading, progress, error } = useFileUpload();
 
     useEffect(() => {
-        const newSocket = io('http://localhost:3002');
+        // Use environment variable or fallback to production URL
+        const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://nano-chat-xl61.onrender.com';
+        const newSocket = io(BACKEND_URL);
         setSocket(newSocket);
 
         newSocket.emit('getMessageHistory');
