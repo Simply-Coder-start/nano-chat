@@ -112,21 +112,6 @@
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Options Menu */
-.options-menu {
-    position: absolute;
-    top: 40px;
     right: 0;
     background: rgba(17, 24, 39, 0.95);
     backdrop-filter: blur(12px);
