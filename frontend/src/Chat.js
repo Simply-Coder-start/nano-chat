@@ -208,6 +208,7 @@ function Chat({ user, onLogout, onOpenSettings, theme, wallpaper }) {
                     setIsSidebarOpen(false);
                 }}
                 onAddContact={() => setShowAddContact(true)}
+                onAddFromContacts={() => setShowCreateGroup(true)}
                 isOpen={isSidebarOpen}
             />
 

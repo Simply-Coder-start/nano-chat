@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ContactItem from './ContactItem';
 import { IconSearch, IconPlus, IconUsers } from './Icons';
 import './Sidebar.css';
 
-function Sidebar({ contacts, selectedContactId, onSelectContact, onAddContact, isOpen }) {
+function Sidebar({ contacts, selectedContactId, onSelectContact, onAddContact, onAddFromContacts, isOpen }) {
     const [searchQuery, setSearchQuery] = useState('');
+    const [showGroupMenu, setShowGroupMenu] = useState(false);
+    const groupMenuRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (groupMenuRef.current && !groupMenuRef.current.contains(event.target)) {
+                setShowGroupMenu(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const filteredContacts = contacts.filter(contact =>
         contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -50,9 +62,25 @@ function Sidebar({ contacts, selectedContactId, onSelectContact, onAddContact, i
                 <IconPlus className="icon-sm" /> <span>Add Contact</span>
             </button>
 
-            <button className="add-contact-btn create-group-btn" onClick={() => onAddContact('group')}>
-                <IconUsers className="icon-sm" /> <span>Create Group</span>
-            </button>
+            <div className="group-btn-container" ref={groupMenuRef}>
+                <button
+                    className="add-contact-btn create-group-btn"
+                    onClick={() => setShowGroupMenu(!showGroupMenu)}
+                >
+                    <IconUsers className="icon-sm" /> <span>Create Group</span>
+                </button>
+
+                {showGroupMenu && (
+                    <div className="group-menu">
+                        <button onClick={() => { onAddContact(); setShowGroupMenu(false); }}>
+                            Add contact
+                        </button>
+                        <button onClick={() => { onAddFromContacts(); setShowGroupMenu(false); }}>
+                            Add member from existing contacts
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
